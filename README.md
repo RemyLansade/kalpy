@@ -12,6 +12,20 @@ Kalpy permet à des professionnels (poseurs, artisans, architectes) comme à des
 
 ---
 
+## Approche de développement
+
+Kalpy suit une approche **BDD (Behaviour Driven Development)** — chaque fonctionnalité est définie à partir de cas d'usage métier concrets, en se mettant à la place de l'utilisateur, avant d'être modélisée en code.
+
+### Documents de référence
+
+| Fichier | Rôle |
+|---|---|
+| [`GLOSSAIRE.md`](GLOSSAIRE.md) | Lexique métier — définitions de tous les termes du domaine du calepinage. Référence commune pour les développeurs et les contributeurs. Tout nouveau concept métier est défini ici avant d'être codé. |
+| [`todo.md`](todo.md) | Plan d'implémentation complet — liste de toutes les tâches à réaliser avec leurs tests unitaires associés. |
+| [`CONTEXT.md`](CONTEXT.md) | Contexte technique complet du projet — architecture, modèles de données, charte graphique, conventions. Destiné aux outils d'assistance au développement. |
+
+---
+
 ## Fonctionnalités
 
 - Modélisation de pièce rectangulaire (par saisie des côtes) ou en forme libre (tracé vectoriel point par point avec cotes éditables)
@@ -146,9 +160,14 @@ ng e2e
 
 ```
 kalpy/
-├── frontend/                  # Application Angular
+├── GLOSSAIRE.md               # Lexique métier
+├── CONTEXT.md                 # Contexte technique
+├── todo.md                    # Plan d'implémentation
+├── frontend/                  # Application Angular 22
 │   ├── src/
 │   │   ├── app/
+│   │   │   ├── core/
+│   │   │   │   └── models/    # Interfaces TypeScript (issues du glossaire)
 │   │   │   ├── room/          # Module pièce (rect + forme libre)
 │   │   │   ├── tiling/        # Module calepinage
 │   │   │   ├── export/        # Module export PDF / CSV
@@ -175,4 +194,8 @@ Ce projet est distribué sous licence [MIT](LICENSE).
 
 ## Contribuer
 
-Les contributions sont les bienvenues. Merci d'ouvrir une issue avant de soumettre une pull request.
+Les contributions sont les bienvenues. Avant de soumettre une pull request :
+
+1. Consulte le [`GLOSSAIRE.md`](GLOSSAIRE.md) — tout nouveau concept métier doit y être défini en premier
+2. Ouvre une issue pour décrire le cas d'usage
+3. Assure-toi que chaque nouveau code est accompagné de ses tests unitaires
