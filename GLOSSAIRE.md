@@ -11,11 +11,81 @@
 ### Utilisateur invité
 Accès libre à l'application sans création de compte.
 Peut modéliser une pièce et simuler un calepinage mais **ne peut ni sauvegarder ni exporter**.
+Aucune donnée n'est persistée — la session est perdue à la fermeture du navigateur.
 
-### Utilisateur connecté
-Accès complet à l'application après authentification.
-Peut sauvegarder ses projets, les recharger et exporter un plan PDF.
-Authentification supportée : email / mot de passe, Google OAuth.
+### Utilisateur particulier
+Utilisateur enregistré sans informations professionnelles.
+Authentification : email / mot de passe ou Google OAuth.
+Facturation **TTC** (TVA 20% incluse).
+Peut choisir entre :
+- Export à l'unité (achat ponctuel)
+- Abonnement mensuel (accès illimité sur la période)
+
+Dispose d'un **historique complet** de tous les plans générés sur son compte, qu'ils aient été achetés à l'unité ou via abonnement.
+
+### Utilisateur professionnel
+Utilisateur enregistré avec un numéro SIRET valide correspondant au secteur du bâtiment.
+Authentification : email / mot de passe ou Google OAuth.
+Facturation **HT** (hors taxes — le professionnel récupère la TVA).
+Peut choisir entre :
+- Export à l'unité (tarification pro HT)
+- Abonnement mensuel (accès illimité sur la période, tarification pro HT)
+
+Dispose d'un **historique complet** de tous les plans générés sur son compte, qu'ils aient été achetés à l'unité ou via abonnement.
+
+Informations supplémentaires obligatoires à l'inscription :
+- Numéro SIRET
+- Statut de validation SIRET (voir ci-dessous)
+
+### Validation SIRET
+Vérification du numéro SIRET d'un utilisateur professionnel via une API externe (ex : API Entreprise / INSEE).
+Deux niveaux de vérification :
+1. **Société active** — la société existe et n'est pas radiée, en liquidation ou en cessation d'activité
+2. **Secteur du bâtiment** — le code NAF / APE correspond au secteur de la construction ou des travaux (codes NAF 41.xx, 42.xx, 43.xx...)
+
+Un professionnel hors secteur bâtiment (ex : coiffeur, code NAF 96.02A) ne peut pas accéder au tarif professionnel et est redirigé vers un compte particulier.
+
+> ⚠️ L'intégration de l'API de validation SIRET est reportée en V2.
+
+---
+
+## Monétisation
+
+> ⚠️ **Tout ce bloc est reporté en V2.** Les concepts sont définis maintenant pour guider la modélisation des données dès la V1.
+
+### Achat à l'unité
+Paiement ponctuel pour exporter un plan PDF.
+Disponible pour les particuliers (TTC) et les professionnels (HT) avec des tarifications différentes.
+Le plan est attaché définitivement au compte et re-téléchargeable à tout moment sans frais supplémentaires.
+
+### Abonnement
+Accès illimité à l'export PDF sur une période choisie.
+Disponible pour les particuliers (TTC) et les professionnels (HT) avec des tarifications différentes.
+L'abonnement est un **engagement ferme** sur la période — pas de résiliation anticipée avec remboursement.
+
+Périodes disponibles :
+- **1 mois** — tarif plein
+- **6 mois** — tarif dégressif
+- **12 mois** — tarif le plus avantageux
+
+Tant que l'abonnement est actif, l'utilisateur peut exporter autant de plans qu'il le souhaite.
+Sans abonnement actif, l'utilisateur repasse en mode achat à l'unité.
+
+> Les montants exacts sont à définir ultérieurement.
+
+### Historique des plans
+L'ensemble des plans PDF générés par un utilisateur connecté (particulier ou professionnel).
+Présent sur tous les comptes connectés, indépendamment du mode de facturation (à l'unité ou abonnement).
+Chaque entrée de l'historique contient : le plan PDF, la date de génération, le projet associé.
+
+### TVA
+Taxe sur la valeur ajoutée appliquée aux utilisateurs particuliers (taux en vigueur en France : 20%).
+Les utilisateurs professionnels sont facturés **hors taxes** — ils récupèrent la TVA dans le cadre de leur activité.
+
+### Facturation
+Document généré à chaque achat ou renouvellement d'abonnement.
+- **Particulier** : facture TTC avec montant TVA détaillé
+- **Professionnel** : facture HT avec numéro SIRET, sans TVA
 
 ---
 
@@ -23,7 +93,7 @@ Authentification supportée : email / mot de passe, Google OAuth.
 
 ### Projet
 L'ensemble du travail sur un chantier donné.
-Appartient à un **utilisateur connecté** — un invité ne peut pas créer de projet persistant.
+Appartient à un **utilisateur connecté** (particulier ou professionnel) — un invité ne peut pas créer de projet persistant.
 Contient une ou plusieurs pièces avec des revêtements différents.
 
 Propriétés :
@@ -129,7 +199,7 @@ La hauteur totale d'une unité de pose en mm.
 Doit être prise en compte lorsque plusieurs revêtements coexistent dans une même pièce pour garantir un niveau de sol uniforme.
 Stockée dans le modèle dès la V1 — le calcul de compensation est prévu en V2.
 
-*Exemple : carrelage 10mm + colle 5mm = 15mm / carreaux de ciment 20mm + colle 3mm = 23mm → compensation de 8mm nécessaire.*
+*Exemple : carrelage 10mm + colle 5mm = 15mm / parquet 14mm + colle 3mm = 17mm → compensation de 2mm nécessaire.*
 
 ### Ragréage
 Produit de nivellement appliqué sur la chape avant la pose pour rattraper les différences d'épaisseur entre deux revêtements.
@@ -218,3 +288,5 @@ Une interruption dans un mur impactant la pose des rangées de coupe en bord de 
 - **Calcul de ragréage** — compensation automatique des différences d'épaisseur
 - **Calcul de frise** — intégration de la frise dans le calepinage et les quantités
 - **Choix de couleur / texture** — personnalisation du rendu visuel par revêtement
+- **Validation SIRET** — intégration API Entreprise / INSEE pour vérification secteur bâtiment
+- **Monétisation** — paiement à l'unité et abonnement (particulier TTC / professionnel HT)
