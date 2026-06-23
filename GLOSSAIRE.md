@@ -360,6 +360,32 @@ Options : centre de la zone, coin bas-gauche, milieu du mur principal.
 La ligne imaginaire passant par le centre de la zone.
 Sert de référence pour garantir la symétrie du calepinage.
 
+### Règles esthétiques du calepinage
+
+Règles appliquées automatiquement par Kalpy en V1 avec alertes associées :
+
+**1. Règle de symétrie**
+Les chutes de chaque côté de la pièce doivent être égales par rapport aux axes de centrage.
+- ✅ Symétrie correcte si chutes égales de chaque côté
+- ⚠️ Asymétrie détectée si écart > 5% entre chute gauche et chute droite
+
+**2. Règle de la première rangée visible**
+La rangée en face de la porte d'entrée (mur principal) doit être entière ou avoir une chute suffisamment grande pour ne pas paraître comme une erreur.
+- ⚠️ Alerte si la première rangée visible contient une chute < ⅓ de la largeur de l'unité
+
+**3. Règle des joints non alignés**
+En pose décalée (½ ou ⅓), les joints ne doivent pas s'aligner sur deux rangées consécutives.
+- ✅ Géré automatiquement par le motif de pose en V1
+- ⚠️ Alerte si le décalage calculé génère un alignement involontaire
+
+**4. Règle de la chute minimale visible**
+Les chutes en périphérie doivent être suffisamment grandes pour ne pas paraître inesthétiques.
+- ⚠️ Alerte si chute < ⅓ de la largeur de l'unité en périphérie visible
+
+> ⚠️ **Reportés en V2-V3 :**
+> - Raccordement entre pièces communicantes (enfilade) — axe de référence commun à plusieurs pièces
+> - Optimisation selon le placement des meubles
+
 ---
 
 ## Coupes et chutes
@@ -518,7 +544,7 @@ Une interruption dans un mur impactant la pose des rangées de coupe en bord de 
 - **Parquet pont de bateau** — décalage ⅓ spécifique au parquet
 - **Parquet massif multi-longueurs** — optimisation automatique de la combinaison de longueurs
 - **Point de Hongrie / Chevron** — lames gauches et droites, calcul de commande en paires
-- **Raccord optimisé** — positionnement des raccords sous les meubles pour les invisibiliser
+- **Enfilade / Raccordement entre pièces** — calepinage continu entre pièces communicantes avec le même revêtement, axe de référence commun pour aligner les joints
 - **Calcul de ragréage** — compensation automatique des différences d'épaisseur
 - **Calcul de frise** — intégration de la frise dans le calepinage et les quantités
 - **Choix de couleur / texture** — personnalisation du rendu visuel par revêtement
