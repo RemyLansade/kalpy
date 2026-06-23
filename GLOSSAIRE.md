@@ -352,9 +352,21 @@ Détermine le point de départ, le sens de pose, les coupes nécessaires et les 
 L'orientation et le motif selon lequel les unités sont posées dans une zone.
 Varie selon le type de revêtement (voir Types de pose ci-dessus).
 
+### Référence de pose
+L'axe aligné sur les murs perpendiculaires de la pièce, utilisé comme base du calepinage.
+Par défaut en V1 : toujours aligné sur les murs à 90°.
+L'utilisateur peut choisir un axe différent (ex: mur oblique) si besoin, mais ce cas est rare et réservé à des configurations spécifiques.
+
+> ⚠️ Le calepinage sur mur oblique est reporté en V2.
+
 ### Point de départ
 Le point de référence à partir duquel le calepinage est calculé.
-Options : centre de la zone, coin bas-gauche, milieu du mur principal.
+Options en V1 :
+- **Centre de la pièce** — axe de centrage, recommandé pour garantir la symétrie
+- **Coin de référence** — coin formé par deux murs perpendiculaires
+
+> ⚠️ En V1, le calepinage ne s'applique qu'aux **pièces rectangulaires**.
+> La modélisation en forme libre est disponible pour dessiner le contour, mais le calcul de calepinage sur formes non rectangulaires est reporté en V2.
 
 ### Axe de centrage
 La ligne imaginaire passant par le centre de la zone.
@@ -533,7 +545,66 @@ Une interruption dans un mur impactant la pose des rangées de coupe en bord de 
 
 ---
 
-## À définir en V2-V3
+## Alertes métier
+
+Liste consolidée de toutes les alertes générées par Kalpy lors du calcul du calepinage.
+
+### Alertes chutes
+- ⚠️ Chute carrelage / travertin < 3cm — découpe trop difficile
+- ⚠️ Chute LVT en largeur < ½ de la largeur de l'unité
+- ⚠️ Chute LVT en longueur < 1,5× la largeur de l'unité
+- ⚠️ Chute visible en périphérie < ⅓ de la largeur de l'unité
+
+### Alertes symétrie
+- ⚠️ Asymétrie détectée — écart > 5% entre chute gauche et chute droite
+- ⚠️ Première rangée visible avec chute < ⅓ de la largeur de l'unité
+
+### Alertes joints
+- ⚠️ Joint de dilatation inférieur à la valeur recommandée pour le matériau
+- ⚠️ Joint de dilatation supérieur à 2× la valeur recommandée
+- ⚠️ Joints alignés sur rangées consécutives en pose décalée
+
+### Alertes surcote
+- ⚠️ Surcote < 10% pour une pose droite — risque de manque de matériaux
+- ⚠️ Surcote < 15% pour une pose diagonale ou complexe
+
+### Alertes obstacles
+- ⚠️ Obstacle(s) présent(s) — découpes spécifiques nécessaires
+- ⚠️ Chute générée par un obstacle < 3cm
+- ⚠️ Surface des obstacles > 50% de la surface de la pièce — vérifier les dimensions saisies
+
+### Alertes positives
+- ✅ Symétrie correcte
+- ✅ Surcote suffisante
+- ✅ Joint de dilatation dans les normes
+- ✅ Aucune chute problématique détectée
+
+---
+
+## Export CSV
+
+### Export CSV
+Fichier CSV généré à l'export d'un projet. Contient la liste complète des matériaux et fournitures nécessaires à la réalisation du chantier.
+Disponible uniquement pour les **utilisateurs connectés**.
+
+**En-tête du fichier :**
+- Nom du projet
+- Date de génération
+- Nom de l'utilisateur
+
+**Colonnes par ligne :**
+
+| Colonne | Description | Exemple |
+|---|---|---|
+| Type de produit | Catégorie du produit | Revêtement, Colle, Joint, Plinthe, Profilé |
+| Désignation | Description détaillée | Carrelage grès cérame 60×60 cm |
+| Zone associée | Nom de la zone concernée | Zone 1 — Cuisine |
+| Quantité | Valeur numérique calculée | 72 |
+| Unité de mesure | Unité V1 | unités, kg, ml |
+
+> **V2** : ajout de la colonne **Référence produit** et conversion des quantités en unités d'achat (paquets, sacs, barres...)
+
+
 
 > Les termes ci-dessous sont identifiés mais pas encore complètement définis.
 > Ils seront précisés lors de l'analyse des versions suivantes.
@@ -544,7 +615,8 @@ Une interruption dans un mur impactant la pose des rangées de coupe en bord de 
 - **Parquet pont de bateau** — décalage ⅓ spécifique au parquet
 - **Parquet massif multi-longueurs** — optimisation automatique de la combinaison de longueurs
 - **Point de Hongrie / Chevron** — lames gauches et droites, calcul de commande en paires
-- **Enfilade / Raccordement entre pièces** — calepinage continu entre pièces communicantes avec le même revêtement, axe de référence commun pour aligner les joints
+- **Calepinage forme non rectangulaire** — calcul de calepinage sur pièces trapézoïdales, en L, polygonales
+- **Pose alignée sur mur oblique** — référence de pose sur un mur non perpendiculaire
 - **Calcul de ragréage** — compensation automatique des différences d'épaisseur
 - **Calcul de frise** — intégration de la frise dans le calepinage et les quantités
 - **Choix de couleur / texture** — personnalisation du rendu visuel par revêtement
