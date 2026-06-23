@@ -18,7 +18,7 @@ Utilisateur enregistré sans informations professionnelles.
 Authentification : email / mot de passe ou Google OAuth.
 Facturation **TTC** (TVA 20% incluse).
 Peut choisir entre :
-- Export à l'unité (achat ponctuel)
+- Export à l'unité (achat ponctuel par plan)
 - Abonnement mensuel (accès illimité sur la période)
 
 Dispose d'un **historique complet** de tous les plans générés sur son compte, qu'ils aient été achetés à l'unité ou via abonnement.
@@ -75,8 +75,8 @@ Sans abonnement actif, l'utilisateur repasse en mode achat à l'unité.
 
 ### Historique des plans
 L'ensemble des plans PDF générés par un utilisateur connecté (particulier ou professionnel).
-Présent sur tous les comptes connectés, indépendamment du mode de facturation (à l'unité ou abonnement).
-Chaque entrée de l'historique contient : le plan PDF, la date de génération, le projet associé.
+Présent sur tous les comptes connectés, indépendamment du mode de facturation.
+Chaque entrée contient : le plan PDF, la date de génération, le projet associé.
 
 ### TVA
 Taxe sur la valeur ajoutée appliquée aux utilisateurs particuliers (taux en vigueur en France : 20%).
@@ -145,12 +145,15 @@ Une pièce peut contenir plusieurs frises.
 
 ### Revêtement
 Le matériau de sol choisi pour une zone.
-Types supportés :
-- **Carrelage / Grès cérame** — avec joint
-- **Travertin** — pierre naturelle, opus romain courant, joint très fin ou nul
-- **Parquet** — pose flottante ou clouée
+Types supportés en V1 :
+- **Carrelage / Grès cérame** — avec joint, formes rectangulaires
+- **Travertin** — pierre naturelle, joint fin ou nul
 - **Sol vinyle / LVT** — en dalles clipsées ou en rouleau
-- **Moquette** — en lés ou en dalles
+- **Moquette** — en lés (rouleau)
+
+Reportés en V2-V3 :
+- Carrelage hexagonal
+- Parquet (toutes variantes)
 
 Chaque revêtement a une couleur de rendu par défaut (le choix de couleur / texture est prévu en V2).
 
@@ -160,35 +163,78 @@ Chaque revêtement a une couleur de rendu par défaut (le choix de couleur / tex
 
 ### Carreau
 Unité de pose pour le **carrelage** et le **grès cérame**.
+En V1 : forme rectangulaire uniquement.
 Défini par : largeur (cm) × hauteur (cm) × épaisseur (mm).
 *Exemple : 60×60 cm, épaisseur 10mm*
+
+> V2-V3 : formes hexagonales, opus romain (multi-formats).
 
 ### Pierre naturelle (dalle de travertin)
 Unité de pose pour le **travertin**.
 Définie par : largeur (cm) × hauteur (cm) × épaisseur (mm).
-Épaisseur souvent irrégulière — à prendre en compte pour le ragréage.
+Les carreaux peuvent être troués — cela ne change pas le plan de calepinage.
 *Exemple : 40×40 cm, épaisseur 12mm*
 
-### Lame
+### Lame de parquet
 Unité de pose pour le **parquet**.
-Définie par : largeur (cm) × longueur (cm) × épaisseur (mm).
-*Exemple : lame 19×180 cm, épaisseur 14mm*
+Il n'existe pas de pose droite en parquet — la pose minimale est toujours à l'anglaise (décalage).
+Variantes :
+- **Contrecollé / Stratifié** — longueur unique par paquet, pose à l'anglaise (décalage ⅓, ½, ¼...)
+- **Massif** — plusieurs longueurs dans un même paquet (ex: 30 / 60 / 90 / 120 cm), optimisation des chutes nécessaire
+- **Point de Hongrie / Chevron** — lames symétriques, vendues 50% gauches + 50% droites dans chaque paquet
 
-### Dalle vinyle / LVT
-Unité de pose pour le **sol vinyle** en dalles clipsées.
+> ⚠️ Le parquet est reporté en V2 dans sa totalité.
+
+### Paquet
+Unité de vente d'un revêtement. Contient un nombre défini d'unités de pose.
+Comportement selon le matériau :
+- **Carrelage / Travertin** : carreaux identiques dans chaque paquet
+- **Sol vinyle / LVT (dalles ou lames)** : unités identiques dans chaque paquet
+- **Parquet contrecollé / stratifié** : lames de longueur unique
+- **Parquet massif** : lames de longueurs variées (ex: 30 / 60 / 90 / 120 cm)
+- **Parquet point de Hongrie** : 50% lames gauches + 50% lames droites
+
+En V1 : calcul en nombre d'unités uniquement.
+En V2 : conversion automatique unités → paquets, intégration catalogue fournisseurs avec référence produit et code-barre.
+
+### Dalle ou lame vinyle / LVT
+Unité de pose pour le **sol vinyle** vendu en paquet (format clipsé).
+Deux formats possibles :
+- **Dalle** : format carré ou rectangulaire court
+- **Lame** : format allongé imitant le parquet
+
 Définie par : largeur (cm) × longueur (cm) × épaisseur (mm).
-*Exemple : dalle LVT 30×60 cm, épaisseur 5mm*
+Vendu en **paquets** (plusieurs unités par paquet).
+*Exemple : dalle LVT 30×60 cm, épaisseur 5mm / lame LVT 18×120 cm, épaisseur 5mm*
 
 ### Lé
 Unité de pose pour la **moquette** et le **sol vinyle** en rouleau.
+La largeur du rouleau est fixe (définie par le fabricant — ex: 4m) et ne peut pas être modifiée.
+On coupe uniquement la longueur à la commande.
+Si la pièce est plus large que le rouleau → plusieurs lés posés côte à côte avec raccord.
+
 Défini par : largeur du rouleau (cm) × longueur coupée (cm) × épaisseur (mm).
-*Exemple : lé moquette 400 cm de large, épaisseur 8mm*
+*Exemple : lé moquette, rouleau 400 cm de large, épaisseur 8mm*
 
 ### Joint
 L'espace laissé entre deux carreaux adjacents, rempli de mortier de jointoiement.
-Défini par sa largeur en mm.
-S'applique au carrelage, au grès cérame et au travertin (joint très fin pour ce dernier).
+Saisi par l'utilisateur en mm.
+S'applique au carrelage, au grès cérame et au travertin.
 *Exemple : joint de 3mm*
+
+### Joint de dilatation périphérique
+Espace laissé entre le revêtement et les murs en périphérie de la pièce.
+Permet au matériau de se dilater librement sous l'effet des variations de température et d'humidité, sans se soulever ni se fissurer.
+Impacte directement le calepinage : la surface posable et le positionnement de la première et dernière rangée sont calculés en tenant compte de cette marge.
+
+Valeurs par défaut selon le matériau :
+- **Carrelage / Grès cérame** : 5mm
+- **Travertin** : 5mm
+- **Parquet massif** : 10mm
+- **Parquet contrecollé / stratifié** : 8mm
+- **Sol vinyle / LVT** : 5mm
+
+L'utilisateur peut modifier ces valeurs manuellement. Une alerte est générée si la valeur saisie s'éloigne des recommandations.
 
 ---
 
@@ -203,7 +249,7 @@ Stockée dans le modèle dès la V1 — le calcul de compensation est prévu en 
 
 ### Ragréage
 Produit de nivellement appliqué sur la chape avant la pose pour rattraper les différences d'épaisseur entre deux revêtements.
-Permet d'obtenir un sol parfaitement horizontal et au même niveau final malgré des épaisseurs de revêtements différentes.
+Permet d'obtenir un sol parfaitement horizontal et au même niveau final malgré des épaisseurs différentes.
 
 *Exemple : si le parquet (14mm) est posé à côté d'un carrelage (10mm), un ragréage de 4mm est appliqué sous le parquet pour compenser.*
 
@@ -217,9 +263,35 @@ Permet d'obtenir un sol parfaitement horizontal et au même niveau final malgré
 Le plan de pose : organisation et disposition des unités de revêtement dans une zone.
 Détermine le point de départ, le sens de pose, les coupes nécessaires et les quantités à commander.
 
+### Types de pose — V1
+
+**Carrelage / Grès cérame**
+- Pose droite (0°)
+- Pose diagonale (45°)
+- Décalage ½
+- Décalage ⅓
+
+**Travertin**
+- Pose droite (0°)
+- Pose diagonale (45°)
+
+**Sol vinyle / LVT (dalles)**
+- Pose droite
+- Décalage ½
+
+**Moquette / Vinyle en rouleau**
+- Pose en lés (sens de la longueur)
+
+### Types de pose — V2-V3
+- Carrelage : Opus romain, Hexagonal
+- Parquet contrecollé / stratifié : À l'anglaise (décalage ⅓, ½, ¼), Pont de bateau
+- Parquet massif : optimisation multi-longueurs
+- Parquet point de Hongrie / Chevron
+- Moquette / Vinyle : optimisation positionnement raccords
+
 ### Sens de pose
 L'orientation et le motif selon lequel les unités sont posées dans une zone.
-Varie selon le type de revêtement (voir types de pose dans README.md).
+Varie selon le type de revêtement (voir Types de pose ci-dessus).
 
 ### Point de départ
 Le point de référence à partir duquel le calepinage est calculé.
@@ -234,8 +306,12 @@ Sert de référence pour garantir la symétrie du calepinage.
 ## Coupes et chutes
 
 ### Chute
-La partie d'une unité de revêtement qui reste après découpe pour s'adapter au bord de la zone ou à un obstacle.
+La partie d'une unité de revêtement qui reste après découpe.
 Une chute trop petite (< 10% de la largeur de l'unité) est à éviter — difficile à poser et inesthétique.
+
+**Pour les rouleaux (moquette / vinyle) :**
+- **Chute en largeur** : différence entre la largeur du rouleau et la largeur réelle du lé posé
+- **Chute en longueur** : différence entre la longueur coupée et la longueur réelle nécessaire (généralement faible)
 
 ### Coupe
 L'action de découper une unité de revêtement à la bonne dimension.
@@ -245,6 +321,23 @@ Une coupe génère une chute réutilisable ou perdue.
 La rangée d'unités en bord de mur qui nécessite une découpe.
 Idéalement symétrique de chaque côté de la zone.
 
+### Marge périphérique
+Surplus de matériau ajouté en périphérie de la pièce pour les revêtements en rouleau (moquette, vinyle).
+Compense le fait que les murs ne sont jamais parfaitement droits.
+Valeur recommandée : **5 cm de chaque côté**.
+Le client ajuste et coupe sur place avec un araseur.
+
+*Impact sur la commande : longueur commandée = longueur réelle + 10 cm / largeur du lé = largeur nécessaire + 10 cm.*
+
+### Raccord
+La jonction entre deux lés posés côte à côte lorsque la largeur de la pièce dépasse la largeur du rouleau.
+En V1 : pris en compte dans le calcul des dimensions uniquement.
+En V2-V3 : optimisation du positionnement pour rendre les raccords invisibles (sous les meubles).
+
+### Araseur
+Outil de coupe utilisé pour ajuster un revêtement souple (moquette, vinyle) en périphérie de pièce contre le mur.
+Permet de compenser les irrégularités des murs après pose du lé avec marge périphérique.
+
 ---
 
 ## Quantités et commande
@@ -253,13 +346,25 @@ Idéalement symétrique de chaque côté de la zone.
 Le pourcentage de matériaux commandés en supplément pour anticiper les erreurs de coupe, les casses et les chutes non réutilisables.
 Valeurs recommandées :
 - **10%** pour une pose droite
-- **15%** pour une pose diagonale ou complexe (chevron, point de Hongrie)
+- **15%** pour une pose diagonale ou complexe
 
 ### Quantité brute
 Le nombre d'unités nécessaires pour couvrir la surface nette d'une zone, sans surcote.
 
 ### Quantité commandée
 La quantité brute augmentée de la surcote. C'est la quantité à commander.
+
+### Fournitures de pose
+Liste des produits nécessaires à la pose selon le revêtement choisi.
+En V1 : liste générique sans référence produit.
+En V2 : références fournisseurs avec tarification.
+
+Exemples par revêtement :
+- **Carrelage / Grès cérame** : colle carrelage, joint carrelage, décapant ciment
+- **Travertin** : colle, joint, bouche-pores, protecteur pierre naturelle
+- **Parquet** : colle parquet, huile ou vitrificateur
+- **Sol vinyle** : colle vinyle ou double-face, profilés de finition
+- **Moquette** : colle moquette ou double-face, profilés de finition, araseur
 
 ---
 
@@ -276,17 +381,22 @@ Une interruption dans un mur impactant la pose des rangées de coupe en bord de 
 
 ---
 
-## À définir en V2
+## À définir en V2-V3
 
 > Les termes ci-dessous sont identifiés mais pas encore complètement définis.
-> Ils seront précisés lors de l'analyse de la V2.
+> Ils seront précisés lors de l'analyse des versions suivantes.
 
+- **Carrelage hexagonal** — forme non rectangulaire, algorithme de pose spécifique
 - **Opus romain** — pose mixant 4 formats de carreaux différents
-- **Point de Hongrie** — variante du chevron à 45°
-- **Raccord** — alignement de motifs entre deux lés de moquette
-- **Calepinage symétrique** — calepinage où les chutes sont égales de chaque côté
+- **Parquet à l'anglaise** — décalage variable (⅓, ½, ¼...) selon le produit
+- **Parquet pont de bateau** — décalage ⅓ spécifique au parquet
+- **Parquet massif multi-longueurs** — optimisation automatique de la combinaison de longueurs
+- **Point de Hongrie / Chevron** — lames gauches et droites, calcul de commande en paires
+- **Raccord optimisé** — positionnement des raccords sous les meubles pour les invisibiliser
 - **Calcul de ragréage** — compensation automatique des différences d'épaisseur
 - **Calcul de frise** — intégration de la frise dans le calepinage et les quantités
 - **Choix de couleur / texture** — personnalisation du rendu visuel par revêtement
 - **Validation SIRET** — intégration API Entreprise / INSEE pour vérification secteur bâtiment
 - **Monétisation** — paiement à l'unité et abonnement (particulier TTC / professionnel HT)
+- **Catalogue fournisseurs** — références produits Leroy Merlin, Castorama... avec tarification
+- **Conversion unités → paquets** — calcul de commande en paquets selon le catalogue
