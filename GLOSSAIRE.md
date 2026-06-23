@@ -172,6 +172,21 @@ A un nom libre choisi par l'utilisateur (ex: "Cuisine", "Chambre 1", "Couloir").
 Définie par son contour (rectangulaire ou forme libre), sa surface nette, ses obstacles et ses ouvertures.
 Peut contenir plusieurs zones de revêtement différentes.
 
+Une pièce existe sous deux états selon le type d'utilisateur :
+
+### Pièce temporaire (session guest)
+Pièce créée par un **utilisateur invité** — existe uniquement en mémoire dans le navigateur.
+Permet à l'invité de découvrir et tester l'application sans s'inscrire.
+**Non associée à un projet** — `projectId` est null.
+**Perdue à la fermeture de la session** — aucune persistance en base de données.
+Si l'invité souhaite sauvegarder → l'application lui propose de créer un compte.
+
+### Pièce persistée (utilisateur connecté)
+Pièce créée par un **utilisateur connecté** (particulier ou professionnel).
+Associée à un projet — `projectId` est renseigné au moment de la sauvegarde.
+Sauvegardée en base de données et rechargeable à tout moment.
+La liaison avec le projet se fait au moment de la première sauvegarde — pas à la création de la pièce.
+
 ### Contour
 La forme géométrique d'une pièce, définie par ses murs.
 Deux modes :
