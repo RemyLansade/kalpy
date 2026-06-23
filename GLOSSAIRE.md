@@ -23,6 +23,11 @@ Peut choisir entre :
 
 Dispose d'un **historique complet** de tous les plans générés sur son compte, qu'ils aient été achetés à l'unité ou via abonnement.
 
+Champs du profil :
+- Nom / Prénom
+- Adresse complète (pour ses propres archives et documents)
+- Email
+
 ### Utilisateur professionnel
 Utilisateur enregistré avec un numéro SIRET valide correspondant au secteur du bâtiment.
 Authentification : email / mot de passe ou Google OAuth.
@@ -33,7 +38,11 @@ Peut choisir entre :
 
 Dispose d'un **historique complet** de tous les plans générés sur son compte, qu'ils aient été achetés à l'unité ou via abonnement.
 
-Informations supplémentaires obligatoires à l'inscription :
+Champs du profil :
+- Nom / Prénom
+- Raison sociale
+- Adresse complète (obligatoire pour la facturation HT)
+- Email
 - Numéro SIRET
 - Statut de validation SIRET (voir ci-dessous)
 
@@ -102,6 +111,56 @@ Propriétés :
 - Numéro de devis généré uniquement à l'export PDF
 
 > V1 : un projet contient une seule pièce.
+
+---
+
+## Plan PDF
+
+### Plan PDF
+Document généré à l'export d'un projet. Contient le plan technique de calepinage et les informations nécessaires à la commande des matériaux.
+Disponible uniquement pour les **utilisateurs connectés** (particulier ou professionnel).
+Adapté automatiquement à l'échelle selon les dimensions de la pièce.
+
+### Contenu du plan PDF
+
+**Entête — Particulier**
+- Nom / Prénom
+- Adresse
+- Date de génération
+- Numéro de projet
+- Mention TTC
+
+**Entête — Professionnel**
+- Raison sociale
+- Adresse complète
+- Numéro SIRET
+- Date de génération
+- Numéro de devis
+- Mention HT + TVA applicable
+
+**Bloc plan de calepinage**
+- Vue de dessus de la pièce à l'échelle (adaptée automatiquement aux dimensions)
+- Représentation des zones avec leur revêtement
+- Axes de centrage
+- Cotes de la pièce
+- Joint de dilatation périphérique visible
+- Obstacles et ouvertures représentés
+- Numérotation des rangées de coupe
+- Indication du point de départ et du sens de pose
+- Échelle graphique + orientation (Nord)
+
+**Bloc liste de matériaux**
+- Par zone : type de revêtement, dimensions de l'unité, surface nette, quantité brute, quantité commandée avec surcote
+- Fournitures de pose associées (liste générique V1, avec références V2)
+
+**Bloc liste de coupes**
+- Par mur : dimension de la chute, nombre de pièces à couper
+- Alertes si chutes problématiques
+
+**Bloc récapitulatif**
+- Surface totale nette
+- Surface totale avec surcote
+- Nombre total d'unités à commander
 
 ---
 
