@@ -444,15 +444,53 @@ La quantité brute augmentée de la surcote. C'est la quantité à commander.
 
 ### Fournitures de pose
 Liste des produits nécessaires à la pose selon le revêtement choisi.
-En V1 : liste générique sans référence produit.
-En V2 : références fournisseurs avec tarification.
 
-Exemples par revêtement :
-- **Carrelage / Grès cérame** : colle carrelage, joint carrelage, décapant ciment
-- **Travertin** : colle, joint, bouche-pores, protecteur pierre naturelle
-- **Parquet** : colle parquet, huile ou vitrificateur
-- **Sol vinyle** : colle vinyle ou double-face, profilés de finition
-- **Moquette** : colle moquette ou double-face, profilés de finition, araseur
+**V1 — unités techniques calculées automatiquement :**
+
+| Élément | Unité V1 |
+|---|---|
+| Revêtement (carreaux / lames / lés) | Nombre d'unités |
+| Colle | Kilogrammes (kg) |
+| Joint carrelage | Kilogrammes (kg) |
+| Plinthes | Mètres linéaires (ml) — périmètre pièce hors ouvertures |
+| Profilés de seuil / finition | Mètres linéaires (ml) |
+
+**V2 — unités d'achat :**
+
+| Élément | Unité V2 |
+|---|---|
+| Revêtement | Paquets |
+| Colle | Sacs (contenance en kg selon fabricant) |
+| Joint | Sacs (contenance en kg selon fabricant) |
+| Profilés | Nombre de barres (longueur standard 2,50m) |
+| Plinthes | Nombre de paquets (2, 3 ou 4 pièces selon fabricant) |
+
+**Rendements colle — valeurs par défaut V1 (ajustables par l'utilisateur) :**
+
+| Revêtement | Méthode | Rendement |
+|---|---|---|
+| Carrelage / Grès cérame | Double encollage | 6 kg/m² |
+| Travertin | Double encollage | 6 kg/m² |
+| Sol vinyle / LVT collé | Simple encollage | 0,3 kg/m² |
+| Moquette collée | Simple encollage | 0,3 kg/m² |
+| Parquet collé | Double encollage | 1,5 kg/m² |
+
+**Calcul du joint carrelage — formule V1 :**
+
+La quantité de joint (en kg) dépend de la surface, de la largeur du joint, de l'épaisseur du carreau et des dimensions du carreau.
+
+```
+kg = surface × (largeur_joint × épaisseur_carreau × 1,6) / ((longueur_carreau + largeur_joint) × (hauteur_carreau + largeur_joint))
+```
+
+*Les dimensions sont en mm, la surface en m².*
+
+**Produits spécifiques par revêtement :**
+- **Carrelage / Grès cérame** : colle, joint, décapant ciment
+- **Travertin** : colle, joint fin, bouche-pores, protecteur pierre naturelle
+- **Sol vinyle collé** : colle contact, profilés de finition
+- **Moquette** : colle, profilés de finition, araseur
+- **Parquet** : colle, huile ou vitrificateur
 
 ---
 
