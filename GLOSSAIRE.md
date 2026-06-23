@@ -307,11 +307,25 @@ Sert de référence pour garantir la symétrie du calepinage.
 
 ### Chute
 La partie d'une unité de revêtement qui reste après découpe.
-Une chute trop petite (< 10% de la largeur de l'unité) est à éviter — difficile à poser et inesthétique.
 
-**Pour les rouleaux (moquette / vinyle) :**
-- **Chute en largeur** : différence entre la largeur du rouleau et la largeur réelle du lé posé
-- **Chute en longueur** : différence entre la longueur coupée et la longueur réelle nécessaire (généralement faible)
+Règles minimales par matériau :
+
+**Carrelage / Grès cérame / Travertin**
+- ⚠️ Chute < 3cm — découpe trop difficile, à éviter absolument
+
+**Dalle / Lame vinyle LVT**
+- ⚠️ Chute en largeur < ½ de la largeur de la dalle/lame
+- ⚠️ Chute en longueur < 1,5× la largeur de la dalle/lame
+
+**Parquet (V2)**
+- ⚠️ Chute en largeur < ½ de la largeur de la lame
+- ⚠️ Chute en longueur < 1,5× la largeur de la lame
+- *Exemple : lame 19cm → chute min largeur = 9,5cm / chute min longueur = 28,5cm*
+
+**Moquette / Vinyle en rouleau**
+- Pas de règle de chute minimale — la marge périphérique de 5cm suffit pour araser proprement
+- Chute en largeur = largeur rouleau − largeur pièce (ex: 4m − 3,30m = 70cm de chute)
+- Chute en longueur quasi nulle — on commande longueur exacte + 10cm
 
 ### Coupe
 L'action de découper une unité de revêtement à la bonne dimension.
@@ -327,11 +341,26 @@ Compense le fait que les murs ne sont jamais parfaitement droits.
 Valeur recommandée : **5 cm de chaque côté**.
 Le client ajuste et coupe sur place avec un araseur.
 
-*Impact sur la commande : longueur commandée = longueur réelle + 10 cm / largeur du lé = largeur nécessaire + 10 cm.*
+Impact sur la commande :
+- Longueur commandée = longueur réelle + 10cm
+- La largeur n'est pas impactée — c'est la largeur fixe du rouleau qui s'applique
+
+### Sens des lés
+Orientation des lés par rapport aux dimensions de la pièce.
+Kalpy calcule automatiquement les deux options et propose celle qui **minimise les chutes et le nombre de lés** :
+
+- **Option A — lés dans le sens de la longueur** : nombre de lés = ⌈ largeur pièce / largeur rouleau ⌉
+- **Option B — lés dans le sens de la largeur** : nombre de lés = ⌈ longueur pièce / largeur rouleau ⌉
+
+L'utilisateur peut choisir manuellement le sens s'il a une contrainte spécifique (esthétique, raccord, sens du trafic).
+
+*Exemple : pièce 3,30m × 5m, rouleau 4m*
+- Option A : 1 lé × 5,10m — chute largeur 70cm ✅ recommandé
+- Option B : 2 lés × 3,40m — raccord nécessaire ⚠️
 
 ### Raccord
-La jonction entre deux lés posés côte à côte lorsque la largeur de la pièce dépasse la largeur du rouleau.
-En V1 : pris en compte dans le calcul des dimensions uniquement.
+La jonction entre deux lés posés côte à côte lorsque la pièce nécessite plusieurs lés.
+En V1 : pris en compte dans le calcul des dimensions et du nombre de lés.
 En V2-V3 : optimisation du positionnement pour rendre les raccords invisibles (sous les meubles).
 
 ### Araseur
